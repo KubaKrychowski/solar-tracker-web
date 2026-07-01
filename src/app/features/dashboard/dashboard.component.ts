@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { catchError, of } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
 
 import { SignalrService } from '../../core/services/signalr.service';
@@ -47,15 +49,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   readonly connected = signal(false);
 
-  ngOnInit(): void {
-    this.api.get<TrackerStatus>('/tracker/status').subscribe({
-      next: s => this.state.status.set(s),
-      error: () => {},
-    });
-    this.api.get<AlarmEvent[]>('/alarms/active').subscribe({
-      next: a => this.state.alarms.set(a),
-    });
+  private readonly initialStatus = toSignal(
+    this.api.get<TrackerStatus>('/tracker/status').pipe(catchError(() => of(null)))
+  );
+  private readonly initialAlarms = toSignal(
+    this.api.get<AlarmEvent[]>('/alarms/active').pipe(catchError(() => of([] as AlarmEvent[])))
+  );
 
+  constructor() {
+    effect(() => {
+      const s = this.initialStatus();
+      if (s) this.state.status.set(s);
+    });
+    effect(() => {
+      const a = this.initialAlarms();
+      if (a?.length) this.state.alarms.set(a);
+    });
+  }
+
+  ngOnInit(): void {
     const tracker = this.signalrSvc.connect('tracker');
     tracker.on('OnStatusUpdate', (s: TrackerStatus) => this.state.status.set(s));
     tracker.on('OnSensorsUpdate', (s: SensorData) => this.state.sensors.set(s));
