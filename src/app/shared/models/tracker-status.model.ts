@@ -1,4 +1,5 @@
 export interface TrackerStatus {
+  timestamp: string;
   azimuth: number;
   elevation: number;
   targetAzimuth: number;

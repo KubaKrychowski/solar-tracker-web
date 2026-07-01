@@ -1,12 +1,28 @@
-import { TrackerStatus } from './tracker-status.model';
-import { SensorData } from './sensor-data.model';
-import { WindData } from './wind-data.model';
-import { UpsStatus } from './ups-status.model';
+import { TrackerMode, TrackerState } from './tracker-status.model';
+import { PowerSource, AtsStatus } from './ups-status.model';
 
 export interface TelemetrySnapshot {
-  trackerStatus: TrackerStatus;
-  sensorData: SensorData;
-  windData: WindData;
-  upsStatus: UpsStatus;
+  id: number;
   timestamp: string;
+
+  azimuth: number;
+  elevation: number;
+  targetAzimuth: number;
+  targetElevation: number;
+  mode: TrackerMode;
+  state: TrackerState;
+
+  voltage: number;
+  current: number;
+  power: number;
+  temperature: number;
+  lightIntensity: number;
+
+  windSpeed: number;
+  windDirection: number;
+
+  batteryLevel: number;
+  powerSource: PowerSource;
+  inverterOutputW: number;
+  atsStatus: AtsStatus;
 }

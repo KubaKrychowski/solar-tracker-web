@@ -1,11 +1,10 @@
 export interface UpsStatus {
-  batteryLevel: number;
-  inputVoltage: number;
-  outputVoltage: number;
-  loadPercent: number;
-  status: UpsState;
-  estimatedRuntime: number;
   timestamp: string;
+  batteryLevel: number;
+  powerSource: PowerSource;
+  inverterOutputW: number;
+  atsStatus: AtsStatus;
 }
 
-export type UpsState = 'online' | 'onBattery' | 'charging' | 'fault' | 'unknown';
+export type PowerSource = 'panel' | 'ups' | 'none';
+export type AtsStatus = 'normal' | 'switchedToUps' | 'fault';

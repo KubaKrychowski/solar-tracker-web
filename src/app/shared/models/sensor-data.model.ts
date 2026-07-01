@@ -1,10 +1,16 @@
+export interface LdrReadings {
+  nw: number;
+  ne: number;
+  sw: number;
+  se: number;
+}
+
 export interface SensorData {
-  illuminanceEast: number;
-  illuminanceWest: number;
-  illuminanceNorth: number;
-  illuminanceSouth: number;
-  temperature: number;
-  humidity: number;
-  pressure: number;
   timestamp: string;
+  voltage: number;
+  current: number;
+  power: number;
+  temperature: number;
+  lightIntensity: number;
+  ldr: LdrReadings;
 }

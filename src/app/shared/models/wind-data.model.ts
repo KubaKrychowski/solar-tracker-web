@@ -1,6 +1,5 @@
 export interface WindData {
+  timestamp: string;
   speed: number;
   direction: number;
-  gust: number;
-  timestamp: string;
 }

@@ -1,12 +1,11 @@
 export interface AlarmEvent {
-  id: string;
-  code: string;
-  message: string;
-  severity: AlarmSeverity;
-  source: string;
   timestamp: string;
-  acknowledged: boolean;
-  acknowledgedAt?: string;
+  type: AlarmType;
+  severity: AlarmSeverity;
+  message: string;
+  autoAction: string | null;
+  resolved: boolean;
 }
 
-export type AlarmSeverity = 'info' | 'warning' | 'error' | 'critical';
+export type AlarmType = 'highWind' | 'lowUps' | 'overheat' | 'connectionLost';
+export type AlarmSeverity = 'warning' | 'critical';
