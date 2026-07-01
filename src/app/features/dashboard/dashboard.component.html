@@ -1,0 +1,214 @@
+<div class="dashboard-container">
+
+  <!-- Tracker Status -->
+  <mat-card class="tracker-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon [class]="getStatusIconClass(status()?.state)">
+          {{ getStatusIcon(status()?.state) }}
+        </mat-icon>
+        Tracker Status
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (status(); as s) {
+        <div class="tracker-grid">
+          <div class="tracker-chips">
+            <mat-chip-set>
+              <mat-chip [class]="getModeChipClass(s.mode)">{{ s.mode }}</mat-chip>
+              <mat-chip [class]="getStateChipClass(s.state)">{{ s.state }}</mat-chip>
+            </mat-chip-set>
+          </div>
+          <div class="tracker-angles">
+            <div class="angle-group">
+              <span class="angle-label">Azimuth</span>
+              <span class="angle-value">{{ s.azimuth | number:'1.1-1' }}°</span>
+              <span class="angle-target">→ {{ s.targetAzimuth | number:'1.1-1' }}°</span>
+            </div>
+            <div class="angle-group">
+              <span class="angle-label">Elevation</span>
+              <span class="angle-value">{{ s.elevation | number:'1.1-1' }}°</span>
+              <span class="angle-target">→ {{ s.targetElevation | number:'1.1-1' }}°</span>
+            </div>
+          </div>
+          <div class="tracker-timestamp">
+            <span class="label">Last update:</span> {{ s.timestamp | date:'HH:mm:ss' }}
+          </div>
+        </div>
+      } @else {
+        <div class="no-data">No tracker data available</div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Sensor Grid -->
+  <div class="sensor-grid">
+
+    <!-- Sensors Card -->
+    <mat-card class="sensor-card">
+      <mat-card-header>
+        <mat-card-title>Sensors</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (sensors(); as s) {
+          <div class="sensor-row">
+            <mat-icon>bolt</mat-icon>
+            <span class="sensor-label">Voltage</span>
+            <span class="sensor-value">{{ s.voltage | number:'1.2-2' }} V</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>electrical_services</mat-icon>
+            <span class="sensor-label">Current</span>
+            <span class="sensor-value">{{ s.current | number:'1.2-2' }} A</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>power</mat-icon>
+            <span class="sensor-label">Power</span>
+            <span class="sensor-value">{{ s.power | number:'1.1-1' }} W</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>thermostat</mat-icon>
+            <span class="sensor-label">Temperature</span>
+            <span class="sensor-value">{{ s.temperature | number:'1.1-1' }} °C</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>light_mode</mat-icon>
+            <span class="sensor-label">Light Intensity</span>
+            <span class="sensor-value">{{ s.lightIntensity | number:'1.0-0' }} lux</span>
+          </div>
+        } @else {
+          <div class="no-data">No sensor data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Wind Card -->
+    <mat-card class="sensor-card">
+      <mat-card-header>
+        <mat-card-title>Wind</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (wind(); as w) {
+          <div class="sensor-row" [class]="getWindClass(w.speed)">
+            <mat-icon>air</mat-icon>
+            <span class="sensor-label">Speed</span>
+            <span class="sensor-value">{{ w.speed | number:'1.1-1' }} m/s</span>
+            @if (w.speed > 15) {
+              <mat-icon class="wind-icon alarm">crisis_alert</mat-icon>
+            } @else if (w.speed > 10) {
+              <mat-icon class="wind-icon warning">warning</mat-icon>
+            }
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>explore</mat-icon>
+            <span class="sensor-label">Direction</span>
+            <span class="sensor-value">{{ w.direction | number:'1.0-0' }}°</span>
+          </div>
+          @if (w.speed > 15) {
+            <div class="wind-alert alarm-box">
+              <mat-icon>crisis_alert</mat-icon> Wind speed critical — tracker may park
+            </div>
+          } @else if (w.speed > 10) {
+            <div class="wind-alert warning-box">
+              <mat-icon>warning</mat-icon> High wind speed detected
+            </div>
+          }
+        } @else {
+          <div class="no-data">No wind data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- UPS Card -->
+    <mat-card class="sensor-card">
+      <mat-card-header>
+        <mat-card-title>UPS</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (ups(); as u) {
+          <div class="battery-section">
+            <div class="sensor-row">
+              <mat-icon>battery_charging_full</mat-icon>
+              <span class="sensor-label">Battery</span>
+              <span class="sensor-value">{{ u.batteryLevel }}%</span>
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="u.batteryLevel"
+              [class]="getBatteryClass(u.batteryLevel)"
+            ></mat-progress-bar>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>power_input</mat-icon>
+            <span class="sensor-label">Power Source</span>
+            <mat-chip-set>
+              <mat-chip [class]="getPowerSourceClass(u.powerSource)">{{ u.powerSource }}</mat-chip>
+            </mat-chip-set>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>swap_horiz</mat-icon>
+            <span class="sensor-label">ATS Status</span>
+            <span class="sensor-value">{{ u.atsStatus }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="sensor-row">
+            <mat-icon>offline_bolt</mat-icon>
+            <span class="sensor-label">Inverter Output</span>
+            <span class="sensor-value">{{ u.inverterOutputW | number:'1.1-1' }} W</span>
+          </div>
+        } @else {
+          <div class="no-data">No UPS data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Alarms Card -->
+    <mat-card class="sensor-card alarms-card" (click)="goToAlarms()">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>notifications</mat-icon>
+          Active Alarms
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (activeAlarms.length > 0) {
+          <mat-list>
+            @for (alarm of activeAlarms; track alarm.type) {
+              <mat-list-item>
+                <mat-icon matListItemIcon [class]="getSeverityClass(alarm.severity)">
+                  {{ getSeverityIcon(alarm.severity) }}
+                </mat-icon>
+                <span matListItemTitle>{{ alarm.type }}</span>
+                <span matListItemLine>{{ alarm.message }}</span>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+            }
+          </mat-list>
+        } @else {
+          <div class="no-alarms">
+            <mat-icon>check_circle</mat-icon>
+            <span>No active alarms</span>
+          </div>
+        }
+        <div class="alarms-hint">Click to view all alarms</div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- Connection Status -->
+  <div class="connection-status">
+    <span class="dot" [class.connected]="connected()" [class.disconnected]="!connected()"></span>
+    <span class="status-text">
+      SignalR {{ connected() ? 'Connected' : 'Disconnected' }}
+    </span>
+  </div>
+
+</div>
