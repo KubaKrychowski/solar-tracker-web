@@ -85,6 +85,13 @@ export class DashboardComponent implements OnInit {
     tracker.onclose(() => this.connected.set(false));
     if (tracker.state === signalR.HubConnectionState.Connected) {
       this.connected.set(true);
+    } else {
+      const check = setInterval(() => {
+        if (tracker.state === signalR.HubConnectionState.Connected) {
+          this.connected.set(true);
+          clearInterval(check);
+        }
+      }, 500);
     }
   }
 
