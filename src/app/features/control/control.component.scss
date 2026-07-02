@@ -16,6 +16,10 @@
 
 .mode-toggle {
   width: 100%;
+
+  mat-button-toggle {
+    flex: 1;
+  }
 }
 
 .state-row {
