@@ -1,0 +1,34 @@
+<div class="sidebar-inner">
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-icon">
+      <mat-icon>wb_sunny</mat-icon>
+    </div>
+    <div class="brand-text">
+      <span class="brand-title">Solar</span>
+      <span class="brand-subtitle">Tracker</span>
+    </div>
+  </div>
+
+  <mat-divider />
+
+  <!-- Nav -->
+  <mat-nav-list class="nav-list">
+    @for (item of navItems; track item.route) {
+      <a
+        mat-list-item
+        [routerLink]="item.route"
+        routerLinkActive="nav-active"
+        (click)="navClick.emit()"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </mat-nav-list>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <span>v1.0.0 — IoT Solar</span>
+  </div>
+</div>

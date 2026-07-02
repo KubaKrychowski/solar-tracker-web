@@ -1,0 +1,386 @@
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Page title
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+// Tracker Status Row
+.tracker-status-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-label {
+  font-size: 0.7rem;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 1;
+}
+
+.status-divider {
+  height: 40px;
+}
+
+.angle-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.angle-current {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.angle-target {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.connection-indicator {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.connected {
+    background-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &.disconnected {
+    background-color: #F44336;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.connection-text {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.no-data-inline {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9rem;
+}
+
+// Chips
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.chip-auto { background-color: #1565C0; color: white; }
+.chip-manual { background-color: #7B1FA2; color: white; }
+.chip-parking { background-color: var(--mat-sys-surface-variant); color: var(--mat-sys-on-surface-variant); }
+.chip-idle { background-color: var(--mat-sys-surface-variant); color: var(--mat-sys-on-surface-variant); }
+.chip-moving { background-color: #FF9800; color: white; }
+.chip-error { background-color: #F44336; color: white; }
+.chip-warning { background-color: #FF9800; color: white; }
+.chip-success { background-color: #4CAF50; color: white; }
+.chip-info { background-color: #2196F3; color: white; }
+
+.chip-with-icon {
+  gap: 4px;
+  margin-top: 12px;
+  padding: 4px 10px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Card Grid
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  mat-card-header {
+    padding-bottom: 8px;
+
+    mat-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  mat-card-content {
+    flex: 1;
+    padding-top: 0;
+  }
+}
+
+// Sensors
+.sensor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sensor-label {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.sensor-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.sensor-value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.sensor-unit {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Wind
+.wind-section {
+  margin-bottom: 16px;
+}
+
+.wind-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.wind-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.wind-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.wind-big-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+
+  &.wind-warning {
+    color: #FF9800;
+  }
+
+  &.wind-danger {
+    color: #F44336;
+  }
+}
+
+.wind-unit {
+  font-size: 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// UPS
+.ups-battery {
+  margin-bottom: 16px;
+
+  mat-progress-bar {
+    margin-top: 8px;
+    height: 8px;
+    border-radius: 4px;
+  }
+}
+
+.ups-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ups-label {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ups-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+// Alarms
+.alarms-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.alarm-count-badge {
+  background-color: #FF9800;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--mat-sys-surface-variant);
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.alarm-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.alarm-message {
+  font-size: 0.875rem;
+}
+
+.alarm-time {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.severity-critical {
+  color: #F44336 !important;
+}
+
+.severity-warning {
+  color: #FF9800 !important;
+}
+
+.severity-info {
+  color: #2196F3 !important;
+}
+
+.no-alarms {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 0;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #4CAF50;
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.no-data {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9rem;
+}

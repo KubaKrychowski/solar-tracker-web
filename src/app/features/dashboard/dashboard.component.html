@@ -1,0 +1,200 @@
+<div class="dashboard-container">
+  <h2 class="page-title">Dashboard</h2>
+
+  <!-- Tracker Status Row -->
+  <div class="tracker-status-row">
+    @if (status(); as s) {
+      <!-- Mode -->
+      <div class="status-item">
+        <span class="status-label">Mode</span>
+        <span class="chip" [class]="getModeChipClass(s.mode)">{{ s.mode }}</span>
+      </div>
+
+      <mat-divider vertical class="status-divider" />
+
+      <!-- State -->
+      <div class="status-item">
+        <span class="status-label">State</span>
+        <span class="chip" [class]="getStateChipClass(s.state)">{{ s.state }}</span>
+      </div>
+
+      <mat-divider vertical class="status-divider" />
+
+      <!-- Azimuth -->
+      <div class="status-item">
+        <span class="status-label">Azimuth</span>
+        <div class="angle-row">
+          <span class="angle-current">{{ s.azimuth | number:'1.1-1' }}°</span>
+          <span class="angle-target">→ {{ s.targetAzimuth | number:'1.1-1' }}°</span>
+        </div>
+      </div>
+
+      <!-- Elevation -->
+      <div class="status-item">
+        <span class="status-label">Elevation</span>
+        <div class="angle-row">
+          <span class="angle-current">{{ s.elevation | number:'1.1-1' }}°</span>
+          <span class="angle-target">→ {{ s.targetElevation | number:'1.1-1' }}°</span>
+        </div>
+      </div>
+
+      <!-- Connection indicator -->
+      <div class="connection-indicator">
+        <span class="dot" [class.connected]="connected()" [class.disconnected]="!connected()"></span>
+        <span class="connection-text">{{ connected() ? 'SignalR Connected' : 'Disconnected' }}</span>
+      </div>
+    } @else {
+      <span class="no-data-inline">No tracker data available</span>
+    }
+  </div>
+
+  <!-- 2×2 Card Grid -->
+  <div class="card-grid">
+
+    <!-- Sensors Card -->
+    <mat-card class="grid-card">
+      <mat-card-header>
+        <mat-card-title>Sensors</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (sensors(); as s) {
+          @for (row of getSensorRows(s); track row.label) {
+            <div class="sensor-row">
+              <mat-icon [style.color]="row.color">{{ row.icon }}</mat-icon>
+              <span class="sensor-label">{{ row.label }}</span>
+              <div class="sensor-value-group">
+                <span class="sensor-value">{{ row.value }}</span>
+                <span class="sensor-unit">{{ row.unit }}</span>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="no-data">No sensor data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Wind Card -->
+    <mat-card class="grid-card">
+      <mat-card-header>
+        <mat-card-title>Wind</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (wind(); as w) {
+          <!-- Speed -->
+          <div class="wind-section">
+            <div class="wind-header">
+              <mat-icon>air</mat-icon>
+              <span class="wind-label">Speed</span>
+            </div>
+            <div class="wind-value-row">
+              <span class="wind-big-value" [class]="getWindValueClass(w.speed)">{{ w.speed | number:'1.1-1' }}</span>
+              <span class="wind-unit">m/s</span>
+            </div>
+            @if (w.speed > 15) {
+              <span class="chip chip-error chip-with-icon">
+                <mat-icon>warning</mat-icon> High wind — stow advised
+              </span>
+            } @else if (w.speed > 10) {
+              <span class="chip chip-warning chip-with-icon">
+                <mat-icon>warning</mat-icon> Moderate wind
+              </span>
+            }
+          </div>
+
+          <mat-divider />
+
+          <!-- Direction -->
+          <div class="wind-section" style="margin-top: 16px">
+            <div class="wind-header">
+              <mat-icon>explore</mat-icon>
+              <span class="wind-label">Direction</span>
+            </div>
+            <div class="wind-value-row">
+              <span class="wind-big-value">{{ w.direction | number:'1.0-0' }}°</span>
+              <span class="wind-unit">{{ getWindCompass(w.direction) }}</span>
+            </div>
+          </div>
+        } @else {
+          <div class="no-data">No wind data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- UPS Card -->
+    <mat-card class="grid-card">
+      <mat-card-header>
+        <mat-card-title>UPS / Power</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (ups(); as u) {
+          <!-- Battery -->
+          <div class="ups-battery">
+            <div class="ups-row">
+              <span class="ups-label">Battery</span>
+              <span class="ups-value">{{ u.batteryLevel }}%</span>
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="u.batteryLevel"
+              [color]="getBatteryColor(u.batteryLevel)"
+            />
+          </div>
+
+          <mat-divider />
+
+          <!-- Power Source -->
+          <div class="ups-row" style="margin-top: 16px">
+            <span class="ups-label">Power Source</span>
+            <span class="chip" [class]="getPowerSourceChipClass(u.powerSource)">{{ u.powerSource }}</span>
+          </div>
+
+          <!-- ATS Status -->
+          <div class="ups-row">
+            <span class="ups-label">ATS Status</span>
+            <span class="ups-value">{{ u.atsStatus }}</span>
+          </div>
+
+          <!-- Inverter -->
+          <div class="ups-row">
+            <span class="ups-label">Inverter Output</span>
+            <span class="ups-value">{{ u.inverterOutputW }} W</span>
+          </div>
+        } @else {
+          <div class="no-data">No UPS data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Active Alarms Card -->
+    <mat-card class="grid-card alarms-card" (click)="goToAlarms()">
+      <mat-card-header>
+        <mat-card-title>Active Alarms</mat-card-title>
+        @if (activeAlarms.length > 0) {
+          <span class="alarm-count-badge">{{ activeAlarms.length }}</span>
+        }
+      </mat-card-header>
+      <mat-card-content>
+        @if (activeAlarms.length > 0) {
+          @for (alarm of activeAlarms; track alarm.type) {
+            <div class="alarm-item" (click)="goToAlarms()">
+              <mat-icon [class]="getSeverityClass(alarm.severity)">
+                {{ getSeverityIcon(alarm.severity) }}
+              </mat-icon>
+              <div class="alarm-text">
+                <span class="alarm-message">{{ alarm.message }}</span>
+                <span class="alarm-time">{{ alarm.timestamp | date:'HH:mm' }}</span>
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="no-alarms">
+            <mat-icon>check_circle</mat-icon>
+            <span>No active alarms</span>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

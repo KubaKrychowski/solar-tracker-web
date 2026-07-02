@@ -1,11 +1,58 @@
-mat-sidenav-container {
-  height: calc(100vh - 64px);
+$drawer-width: 220px;
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-mat-sidenav {
-  width: 220px;
+.sidebar {
+  width: $drawer-width;
+  flex-shrink: 0;
+  background-color: var(--mat-sys-surface-container);
+  border-right: 1px solid var(--mat-sys-outline-variant);
 }
 
-.active {
-  background: rgba(0, 0, 0, 0.08);
+.mobile-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.mobile-drawer {
+  width: $drawer-width;
+}
+
+.main-column {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.app-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+  background-color: var(--mat-sys-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-bar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 24px;
+  overflow: auto;
 }

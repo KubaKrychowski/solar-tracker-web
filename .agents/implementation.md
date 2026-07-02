@@ -1,3 +1,44 @@
+# Implementation Report — feat/dashboard
+
+## Status: DONE — ng build SUCCESS (warning only)
+
+## What was done
+
+### DashboardComponent — live dashboard z SignalR
+
+Pliki:
+- `src/app/features/dashboard/dashboard.component.ts` — pełna logika, Angular 20 standalone
+- `src/app/features/dashboard/dashboard.component.html` — template osobny plik
+- `src/app/features/dashboard/dashboard.component.scss` — SCSS osobny plik
+
+### Sekcje UI
+- **Górna**: Karta "Tracker Status" — Mode/State chips z kolorami, Azimuth/Elevation (aktualne + docelowe), ikona (zielona/czerwona/szara)
+- **Grid 2x2** (responsive, `auto-fit minmax(300px, 1fr)`):
+  - Sensors Card — Voltage, Current, Power, Temperature, Light Intensity z ikonami
+  - Wind Card — Speed (ostrzeżenie >10 m/s, alarm >15 m/s), Direction z kompasem
+  - UPS Card — Battery z `mat-progress-bar` (zielony/żółty/czerwony), PowerSource chip, ATS Status, Inverter Output
+  - Alarms Card — lista max 5 alarmów z severity icons, klik → `/alarms`
+- **Dolna**: connection status indicator (zielona/czerwona kropka)
+
+### Logika
+- `ngOnInit`: initial REST load (GET /tracker/status, GET /alarms/active), SignalR connect('tracker') + connect('alarms'), nasłuch na 5 zdarzeń
+- `ngOnDestroy`: pusta (state persists across routes)
+- Sygnały Angular 20: `connected = signal(false)`, exposuje `this.state.*` do template
+- Import `* as signalR` do sprawdzenia `HubConnectionState.Connected`
+
+### Build
+```
+dashboard-component chunk: 122.86 kB (lazy loaded)
+Warning: SCSS budget 4.40 kB / limit 4.00 kB (tylko ostrzeżenie, build SUCCESS)
+```
+
+### Uwagi
+- Brak komentarzy w kodzie (zgodnie z zasadami)
+- Standalone component z pełną listą Material imports
+- SCSS używa CSS variables Angular Material (`--mat-sys-*`)
+
+---
+
 # Implementation Report — chore/web-scaffolding
 
 ## Status: DONE — ng build SUCCESS

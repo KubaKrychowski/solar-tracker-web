@@ -1,35 +1,55 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="sidenavOpen = !sidenavOpen">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Solar Tracker</span>
-</mat-toolbar>
-<mat-sidenav-container>
-  <mat-sidenav [opened]="sidenavOpen" mode="side">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon matListItemIcon>dashboard</mat-icon>
-        <span>Dashboard</span>
-      </a>
-      <a mat-list-item routerLink="/control" routerLinkActive="active">
-        <mat-icon matListItemIcon>3d_rotation</mat-icon>
-        <span>Control</span>
-      </a>
-      <a mat-list-item routerLink="/charts" routerLinkActive="active">
-        <mat-icon matListItemIcon>show_chart</mat-icon>
-        <span>Charts</span>
-      </a>
-      <a mat-list-item routerLink="/power" routerLinkActive="active">
-        <mat-icon matListItemIcon>battery_charging_full</mat-icon>
-        <span>Power</span>
-      </a>
-      <a mat-list-item routerLink="/alarms" routerLinkActive="active">
-        <mat-icon matListItemIcon>warning</mat-icon>
-        <span>Alarms</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
+<div class="app-layout">
+  <!-- Permanent sidebar — desktop -->
+  @if (!isMobile()) {
+    <aside class="sidebar">
+      <app-sidebar (navClick)="onNavClick()" />
+    </aside>
+  }
+
+  <!-- Temporary drawer — mobile -->
+  @if (isMobile()) {
+    <mat-sidenav-container class="mobile-container">
+      <mat-sidenav
+        [opened]="mobileOpen"
+        mode="over"
+        (closed)="mobileOpen = false"
+        class="mobile-drawer"
+      >
+        <app-sidebar (navClick)="onNavClick()" />
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <ng-container *ngTemplateOutlet="mainContent" />
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  }
+
+  <!-- Desktop main -->
+  @if (!isMobile()) {
+    <div class="main-column">
+      <ng-container *ngTemplateOutlet="mainContent" />
+    </div>
+  }
+</div>
+
+<ng-template #mainContent>
+  <header class="app-bar">
+    @if (isMobile()) {
+      <button mat-icon-button (click)="mobileOpen = true" aria-label="open navigation">
+        <mat-icon>menu</mat-icon>
+      </button>
+    }
+    <span class="app-bar-title">Solar Tracker</span>
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      (click)="toggleTheme()"
+      [matTooltip]="darkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      aria-label="toggle theme"
+    >
+      <mat-icon>{{ darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </header>
+  <main class="page-content">
     <router-outlet />
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </main>
+</ng-template>
