@@ -1,0 +1,65 @@
+<div class="alarms-container">
+  <div class="alarms-header">
+    <h2 class="page-title">Alarms</h2>
+  </div>
+
+  <!-- Summary chips -->
+  <div class="summary-chips">
+    <mat-chip-set>
+      <mat-chip>Total: {{ allAlarms().length }}</mat-chip>
+      <mat-chip [highlighted]="activeCount() > 0" class="chip-active">
+        Active: {{ activeCount() }}
+      </mat-chip>
+      <mat-chip class="chip-resolved">Resolved: {{ resolvedCount() }}</mat-chip>
+      <mat-chip [highlighted]="criticalCount() > 0" class="chip-critical">
+        Critical: {{ criticalCount() }}
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <!-- Tabs -->
+  <mat-tab-group
+    [(selectedIndex)]="tabIndex"
+    class="alarm-tabs"
+  >
+    <mat-tab [label]="'All (' + allAlarms().length + ')'"></mat-tab>
+    <mat-tab [label]="'Active (' + activeCount() + ')'"></mat-tab>
+    <mat-tab [label]="'Resolved (' + resolvedCount() + ')'"></mat-tab>
+  </mat-tab-group>
+
+  <!-- Alarm list -->
+  @if (filteredAlarms().length === 0) {
+    <div class="empty-state">
+      <mat-icon class="empty-icon">check_circle</mat-icon>
+      <span class="empty-text">No alarms in this category</span>
+    </div>
+  } @else {
+    <div class="alarm-list">
+      @for (alarm of filteredAlarms(); track alarm.timestamp + alarm.type) {
+        <mat-card class="alarm-card" [class.resolved]="alarm.resolved"
+          [style.border-left-color]="getSeverityColor(alarm.severity)">
+          <mat-card-content class="alarm-content">
+            <mat-icon class="alarm-icon" [style.color]="getSeverityColor(alarm.severity)">
+              {{ getSeverityIcon(alarm.severity) }}
+            </mat-icon>
+
+            <div class="alarm-details">
+              <div class="alarm-title-row">
+                <span class="alarm-message">{{ alarm.message }}</span>
+                @if (!alarm.resolved) {
+                  <span class="status-chip active">Active</span>
+                } @else {
+                  <span class="status-chip resolved">Resolved</span>
+                }
+              </div>
+              <span class="alarm-meta">{{ getAlarmComponent(alarm.type) }} — {{ formatTimestamp(alarm.timestamp) }}</span>
+              @if (alarm.autoAction) {
+                <span class="alarm-meta">Auto-action: {{ alarm.autoAction }}</span>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>
