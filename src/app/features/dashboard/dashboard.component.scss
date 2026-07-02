@@ -1,228 +1,291 @@
 .dashboard-container {
-  padding: 24px;
   max-width: 1400px;
   margin: 0 auto;
+}
+
+// Page title
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+// Tracker Status Row
+.tracker-status-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.status-item {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 6px;
 }
 
-// Tracker Status Card
-.tracker-card {
-  width: 100%;
+.status-label {
+  font-size: 0.7rem;
+  color: var(--mat-sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 1;
+}
 
-  mat-card-header {
-    background-color: var(--mat-sys-surface-container-high);
-    padding: 12px 16px;
-    border-radius: 12px 12px 0 0;
-    margin: -16px -16px 16px;
+.status-divider {
+  height: 40px;
+}
 
-    mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1.1rem;
-    }
+.angle-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.angle-current {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.angle-target {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.connection-indicator {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.connected {
+    background-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+    animation: pulse 2s ease-in-out infinite;
   }
 
-  .tracker-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .tracker-chips {
-    display: flex;
-    align-items: center;
-  }
-
-  .tracker-angles {
-    display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-
-  .angle-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .angle-label {
-    font-size: 0.75rem;
-    color: var(--mat-sys-on-surface-variant);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .angle-value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--mat-sys-on-surface);
-  }
-
-  .angle-target {
-    font-size: 0.85rem;
-    color: var(--mat-sys-on-surface-variant);
-  }
-
-  .tracker-timestamp {
-    font-size: 0.8rem;
-    color: var(--mat-sys-on-surface-variant);
-
-    .label {
-      font-weight: 500;
-    }
+  &.disconnected {
+    background-color: #F44336;
   }
 }
 
-// Status icons
-.icon-ok {
-  color: #4caf50;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
-.icon-error {
-  color: #f44336;
+.connection-text {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.icon-parked {
-  color: #9e9e9e;
+.no-data-inline {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9rem;
 }
 
 // Chips
-.chip-auto { background-color: #1565c0 !important; color: white !important; }
-.chip-manual { background-color: #6a1b9a !important; color: white !important; }
-.chip-parking { background-color: #546e7a !important; color: white !important; }
-.chip-error { background-color: #c62828 !important; color: white !important; }
-.chip-moving { background-color: #e65100 !important; color: white !important; }
-.chip-default { background-color: var(--mat-sys-surface-variant) !important; }
-.chip-panel { background-color: #2e7d32 !important; color: white !important; }
-.chip-ups { background-color: #e65100 !important; color: white !important; }
-.chip-none { background-color: #757575 !important; color: white !important; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
 
-// Sensor Grid
-.sensor-grid {
+.chip-auto { background-color: #1565C0; color: white; }
+.chip-manual { background-color: #7B1FA2; color: white; }
+.chip-parking { background-color: var(--mat-sys-surface-variant); color: var(--mat-sys-on-surface-variant); }
+.chip-idle { background-color: var(--mat-sys-surface-variant); color: var(--mat-sys-on-surface-variant); }
+.chip-moving { background-color: #FF9800; color: white; }
+.chip-error { background-color: #F44336; color: white; }
+.chip-warning { background-color: #FF9800; color: white; }
+.chip-success { background-color: #4CAF50; color: white; }
+.chip-info { background-color: #2196F3; color: white; }
+
+.chip-with-icon {
+  gap: 4px;
+  margin-top: 12px;
+  padding: 4px 10px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Card Grid
+.card-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  gap: 16px;
+  align-items: start;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 }
 
-.sensor-card {
+.grid-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
   mat-card-header {
-    background-color: var(--mat-sys-surface-container-high);
-    padding: 12px 16px;
-    border-radius: 12px 12px 0 0;
-    margin: -16px -16px 16px;
+    padding-bottom: 8px;
 
     mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       font-size: 1rem;
+      font-weight: 600;
     }
   }
 
   mat-card-content {
-    padding-top: 8px;
+    flex: 1;
+    padding-top: 0;
   }
 }
 
+// Sensors
 .sensor-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 0;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   mat-icon {
-    color: var(--mat-sys-primary);
     flex-shrink: 0;
-  }
-
-  .sensor-label {
-    flex: 1;
-    font-size: 0.9rem;
-    color: var(--mat-sys-on-surface-variant);
-  }
-
-  .sensor-value {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--mat-sys-on-surface);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
   }
 }
 
-// Wind states
-.wind-warning {
-  .sensor-value {
-    color: #f9a825;
-  }
+.sensor-label {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.wind-alarm {
-  .sensor-value {
-    color: #c62828;
-  }
+.sensor-value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
 }
 
-.wind-icon {
-  &.warning {
-    color: #f9a825;
-  }
-
-  &.alarm {
-    color: #c62828;
-  }
+.sensor-value {
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 
-.wind-alert {
+.sensor-unit {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Wind
+.wind-section {
+  margin-bottom: 16px;
+}
+
+.wind-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  margin-top: 12px;
+  gap: 8px;
+  margin-bottom: 4px;
 
-  &.warning-box {
-    background-color: rgba(249, 168, 37, 0.15);
-    color: #f9a825;
-  }
-
-  &.alarm-box {
-    background-color: rgba(198, 40, 40, 0.15);
-    color: #c62828;
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--mat-sys-on-surface-variant);
   }
 }
 
-// Battery
-.battery-section {
+.wind-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.wind-value-row {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
   gap: 6px;
 }
 
-mat-progress-bar {
-  height: 6px;
-  border-radius: 3px;
+.wind-big-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
 
-  &.battery-ok {
-    --mdc-linear-progress-active-indicator-color: #4caf50;
+  &.wind-warning {
+    color: #FF9800;
   }
 
-  &.battery-mid {
-    --mdc-linear-progress-active-indicator-color: #f9a825;
-  }
-
-  &.battery-low {
-    --mdc-linear-progress-active-indicator-color: #f44336;
+  &.wind-danger {
+    color: #F44336;
   }
 }
 
-// Alarms Card
+.wind-unit {
+  font-size: 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// UPS
+.ups-battery {
+  margin-bottom: 16px;
+
+  mat-progress-bar {
+    margin-top: 8px;
+    height: 8px;
+    border-radius: 4px;
+  }
+}
+
+.ups-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ups-label {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ups-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+// Alarms
 .alarms-card {
   cursor: pointer;
   transition: box-shadow 0.2s;
@@ -230,6 +293,68 @@ mat-progress-bar {
   &:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.alarm-count-badge {
+  background-color: #FF9800;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--mat-sys-surface-variant);
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.alarm-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.alarm-message {
+  font-size: 0.875rem;
+}
+
+.alarm-time {
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.severity-critical {
+  color: #F44336 !important;
+}
+
+.severity-warning {
+  color: #FF9800 !important;
+}
+
+.severity-info {
+  color: #2196F3 !important;
 }
 
 .no-alarms {
@@ -237,72 +362,25 @@ mat-progress-bar {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 24px 0;
-  color: #4caf50;
+  gap: 12px;
+  padding: 32px 0;
 
   mat-icon {
-    font-size: 2rem;
-    width: 2rem;
-    height: 2rem;
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #4CAF50;
   }
 
   span {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--mat-sys-on-surface-variant);
   }
 }
 
-.severity-critical {
-  color: #c62828 !important;
-}
-
-.severity-warning {
-  color: #f9a825 !important;
-}
-
-.alarms-hint {
-  font-size: 0.75rem;
-  color: var(--mat-sys-on-surface-variant);
-  text-align: right;
-  margin-top: 8px;
-  padding-top: 4px;
-}
-
-// No data state
 .no-data {
   padding: 24px 0;
   text-align: center;
   color: var(--mat-sys-on-surface-variant);
   font-size: 0.9rem;
-}
-
-// Connection status
-.connection-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-
-    &.connected {
-      background-color: #4caf50;
-      box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
-    }
-
-    &.disconnected {
-      background-color: #f44336;
-      box-shadow: 0 0 6px rgba(244, 67, 54, 0.6);
-    }
-  }
-
-  .status-text {
-    font-size: 0.8rem;
-    color: var(--mat-sys-on-surface-variant);
-  }
 }

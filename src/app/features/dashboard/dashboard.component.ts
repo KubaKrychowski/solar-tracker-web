@@ -3,10 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { catchError, of } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
@@ -20,16 +18,22 @@ import { WindData } from '../../shared/models/wind-data.model';
 import { UpsStatus } from '../../shared/models/ups-status.model';
 import { AlarmEvent } from '../../shared/models/alarm-event.model';
 
+interface SensorRow {
+  icon: string;
+  color: string;
+  label: string;
+  value: string;
+  unit: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
-    MatChipsModule,
     MatIconModule,
     MatProgressBarModule,
-    MatListModule,
     MatDividerModule,
   ],
   templateUrl: './dashboard.component.html',
@@ -95,63 +99,74 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/alarms']);
   }
 
-  getStatusIcon(state: string | undefined): string {
-    if (state === 'error') return 'error';
-    if (state === 'parked') return 'night_shelter';
-    return 'check_circle';
+  getSensorRows(s: SensorData): SensorRow[] {
+    return [
+      { icon: 'bolt', color: '#FFA726', label: 'Voltage', value: s.voltage.toFixed(1), unit: 'V' },
+      { icon: 'cable', color: '#42A5F5', label: 'Current', value: s.current.toFixed(1), unit: 'A' },
+      { icon: 'local_fire_department', color: '#EF5350', label: 'Power', value: s.power.toFixed(0), unit: 'W' },
+      { icon: 'thermostat', color: '#FF7043', label: 'Temperature', value: s.temperature.toFixed(1), unit: '°C' },
+      { icon: 'light_mode', color: '#FFD54F', label: 'Light', value: s.lightIntensity.toLocaleString(), unit: 'lux' },
+    ];
   }
 
-  getStatusIconClass(state: string | undefined): string {
-    if (state === 'error') return 'icon-error';
-    if (state === 'parked') return 'icon-parked';
-    return 'icon-ok';
+  getModeChipClass(mode: string): string {
+    switch (mode.toLowerCase()) {
+      case 'auto': return 'chip chip-auto';
+      case 'manual': return 'chip chip-manual';
+      default: return 'chip chip-parking';
+    }
   }
 
-  getModeChipClass(mode: string | undefined): string {
-    if (mode === 'auto') return 'chip-auto';
-    if (mode === 'manual') return 'chip-manual';
-    return 'chip-parking';
+  getStateChipClass(state: string): string {
+    switch (state.toLowerCase()) {
+      case 'moving': return 'chip chip-moving';
+      case 'error': return 'chip chip-error';
+      default: return 'chip chip-idle';
+    }
   }
 
-  getStateChipClass(state: string | undefined): string {
-    if (state === 'error') return 'chip-error';
-    if (state === 'moving') return 'chip-moving';
-    return 'chip-default';
-  }
-
-  getWindClass(speed: number | undefined): string {
-    if (!speed) return '';
-    if (speed > 15) return 'wind-alarm';
+  getWindValueClass(speed: number): string {
+    if (speed > 15) return 'wind-danger';
     if (speed > 10) return 'wind-warning';
     return '';
   }
 
-  getBatteryClass(level: number | undefined): string {
-    if (level === undefined || level === null) return 'battery-ok';
-    if (level < 20) return 'battery-low';
-    if (level < 50) return 'battery-mid';
-    return 'battery-ok';
+  getWindCompass(deg: number): string {
+    const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    return dirs[Math.round(deg / 22.5) % 16];
   }
 
-  getBatteryBarMode(): 'determinate' {
-    return 'determinate';
+  getBatteryColor(level: number): string {
+    if (level > 50) return 'primary';
+    if (level > 20) return 'accent';
+    return 'warn';
   }
 
-  getPowerSourceClass(source: string | undefined): string {
-    if (source === 'panel') return 'chip-panel';
-    if (source === 'ups') return 'chip-ups';
-    return 'chip-none';
+  getPowerSourceChipClass(source: string): string {
+    switch (source.toLowerCase()) {
+      case 'grid': return 'chip chip-success';
+      case 'battery': return 'chip chip-warning';
+      default: return 'chip chip-info';
+    }
   }
 
   getSeverityIcon(severity: string): string {
-    return severity === 'critical' ? 'dangerous' : 'warning';
+    switch (severity.toLowerCase()) {
+      case 'critical': return 'error';
+      case 'warning': return 'warning';
+      default: return 'info';
+    }
   }
 
   getSeverityClass(severity: string): string {
-    return severity === 'critical' ? 'severity-critical' : 'severity-warning';
+    switch (severity.toLowerCase()) {
+      case 'critical': return 'severity-critical';
+      case 'warning': return 'severity-warning';
+      default: return 'severity-info';
+    }
   }
 
   get activeAlarms(): AlarmEvent[] {
-    return this.alarms().slice(0, 5);
+    return this.alarms().filter(a => !a.resolved).slice(0, 5);
   }
 }
