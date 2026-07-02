@@ -1,0 +1,43 @@
+.charts-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.charts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.range-toggle {
+  mat-button-toggle {
+    font-size: 0.8rem;
+  }
+}
+
+.chart-card {
+  margin-bottom: 16px;
+
+  mat-card-header {
+    padding-bottom: 8px;
+
+    mat-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.chart-wrapper {
+  height: 220px;
+  position: relative;
+}
