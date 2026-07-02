@@ -1,0 +1,146 @@
+.power-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+// Stat cards
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (min-width: 769px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  mat-card-content {
+    padding: 16px !important;
+  }
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--mat-sys-on-surface-variant);
+  line-height: 1.2;
+}
+
+.stat-primary { color: #2196F3; }
+.stat-warning { color: #FF9800; }
+.stat-success { color: #4CAF50; }
+.stat-info { color: #29B6F6; }
+
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-unit {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Bottom grid
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @media (min-width: 769px) {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.summary-card, .weekly-card {
+  mat-card-header {
+    padding-bottom: 8px;
+
+    mat-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// Daily summary
+.target-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.target-label {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.target-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.target-percent {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+mat-divider {
+  margin: 16px 0;
+}
+
+.summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.summary-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &.success {
+    color: #4CAF50;
+  }
+}
+
+// Weekly chart
+.chart-wrapper {
+  height: 230px;
+  position: relative;
+}
