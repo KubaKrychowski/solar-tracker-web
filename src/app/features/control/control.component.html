@@ -1,0 +1,156 @@
+<div class="control-container">
+  <h2 class="page-title">Control</h2>
+
+  <!-- Operating Mode -->
+  <mat-card class="mode-card">
+    <mat-card-header>
+      <mat-card-title>Operating Mode</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-button-toggle-group
+        [value]="status()?.mode"
+        (change)="onModeChange($event.value)"
+        [disabled]="isMoving()"
+        class="mode-toggle"
+      >
+        <mat-button-toggle value="auto">Auto</mat-button-toggle>
+        <mat-button-toggle value="manual">Manual</mat-button-toggle>
+        <mat-button-toggle value="parking">Parking</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div class="state-row">
+        <span class="chip" [class]="getStateChipClass()">{{ status()?.state ?? 'unknown' }}</span>
+        @if (isMoving()) {
+          <span class="moving-text">Tracker is moving to target position…</span>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Position + Control grid -->
+  <div class="control-grid">
+
+    <!-- Current Position -->
+    <mat-card class="grid-card">
+      <mat-card-header>
+        <mat-card-title>Current Position</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (status(); as s) {
+          <div class="position-display">
+            <div class="position-axis">
+              <span class="axis-label">Azimuth</span>
+              <span class="axis-value">{{ s.azimuth | number:'1.1-1' }}°</span>
+            </div>
+            <mat-divider vertical />
+            <div class="position-axis">
+              <span class="axis-label">Elevation</span>
+              <span class="axis-value">{{ s.elevation | number:'1.1-1' }}°</span>
+            </div>
+          </div>
+
+          <mat-divider />
+
+          <div class="target-display">
+            <div class="target-item">
+              <span class="target-label">Target Az</span>
+              <span class="target-value">
+                {{ s.mode === 'auto' ? 'Calculated by algorithm' : (s.targetAzimuth | number:'1.1-1') + '°' }}
+              </span>
+            </div>
+            <div class="target-item">
+              <span class="target-label">Target El</span>
+              <span class="target-value">
+                {{ s.mode === 'auto' ? 'Calculated by algorithm' : (s.targetElevation | number:'1.1-1') + '°' }}
+              </span>
+            </div>
+          </div>
+        } @else {
+          <div class="no-data">No position data</div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Manual Target (when manual mode) -->
+    @if (status()?.mode === 'manual') {
+      <mat-card class="grid-card">
+        <mat-card-header>
+          <mat-card-title>Manual Target</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Azimuth</span>
+              <span class="slider-value">{{ targetAz() | number:'1.1-1' }}°</span>
+            </div>
+            <mat-slider
+              [min]="0" [max]="360" [step]="0.5"
+              [disabled]="isMoving()"
+              class="full-width-slider"
+            >
+              <input matSliderThumb [value]="targetAz()" (valueChange)="targetAz.set($event)" />
+            </mat-slider>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Elevation</span>
+              <span class="slider-value">{{ targetEl() | number:'1.1-1' }}°</span>
+            </div>
+            <mat-slider
+              [min]="0" [max]="90" [step]="0.5"
+              [disabled]="isMoving()"
+              class="full-width-slider"
+            >
+              <input matSliderThumb [value]="targetEl()" (valueChange)="targetEl.set($event)" />
+            </mat-slider>
+          </div>
+
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="isMoving()"
+            (click)="sendToTarget()"
+            class="send-btn"
+          >
+            {{ isMoving() ? 'Moving…' : 'Send to Target' }}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Quick Commands (when not manual mode) -->
+    @if (status()?.mode !== 'manual') {
+      <mat-card class="grid-card">
+        <mat-card-header>
+          <mat-card-title>Quick Commands</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="commands-content">
+          <button
+            mat-stroked-button
+            [disabled]="isMoving()"
+            (click)="parkTracker()"
+            class="command-btn"
+          >
+            <mat-icon>nights_stay</mat-icon>
+            Park Tracker
+          </button>
+
+          <mat-divider />
+
+          <button
+            mat-stroked-button
+            color="warn"
+            [disabled]="isMoving()"
+            (click)="onModeChange('auto')"
+            class="command-btn"
+          >
+            <mat-icon>restart_alt</mat-icon>
+            Reset to Auto
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+
+  </div>
+</div>

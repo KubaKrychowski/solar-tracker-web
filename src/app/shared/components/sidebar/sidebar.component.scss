@@ -59,10 +59,14 @@
 
   .nav-active {
     background-color: var(--mat-sys-primary) !important;
-    color: var(--mat-sys-on-primary) !important;
+    color: white !important;
 
     mat-icon {
-      color: var(--mat-sys-on-primary) !important;
+      color: white !important;
+    }
+
+    span {
+      color: white !important;
     }
 
     &:hover {
