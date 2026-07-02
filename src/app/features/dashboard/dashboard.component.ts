@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, effect } from '@angular/core';
+import { Component, OnInit, inject, signal, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
-import { catchError, of } from 'rxjs';
+import { of } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
 
 import { SignalrService } from '../../core/services/signalr.service';
@@ -17,14 +17,9 @@ import { SensorData } from '../../shared/models/sensor-data.model';
 import { WindData } from '../../shared/models/wind-data.model';
 import { UpsStatus } from '../../shared/models/ups-status.model';
 import { AlarmEvent } from '../../shared/models/alarm-event.model';
+import { SensorRow } from '../../shared/models/sensor-row.model';
 
-interface SensorRow {
-  icon: string;
-  color: string;
-  label: string;
-  value: string;
-  unit: string;
-}
+const MAX_VISIBLE_ALARMS = 5;
 
 @Component({
   selector: 'app-dashboard',
@@ -39,7 +34,7 @@ interface SensorRow {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   private readonly signalrSvc = inject(SignalrService);
   private readonly api = inject(ApiService);
   private readonly state = inject(TrackerStateService);
@@ -54,10 +49,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly connected = signal(false);
 
   private readonly initialStatus = toSignal(
-    this.api.get<TrackerStatus>('/tracker/status').pipe(catchError(() => of(null)))
+    this.api.get<TrackerStatus>('/tracker/status')
   );
   private readonly initialAlarms = toSignal(
-    this.api.get<AlarmEvent[]>('/alarms/active').pipe(catchError(() => of([] as AlarmEvent[])))
+    this.api.get<AlarmEvent[]>('/alarms/active')
   );
 
   constructor() {
@@ -92,8 +87,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.connected.set(true);
     }
   }
-
-  ngOnDestroy(): void {}
 
   goToAlarms(): void {
     this.router.navigate(['/alarms']);
@@ -167,6 +160,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   get activeAlarms(): AlarmEvent[] {
-    return this.alarms().filter(a => !a.resolved).slice(0, 5);
+    return this.alarms().filter(a => !a.resolved).slice(0, MAX_VISIBLE_ALARMS);
   }
 }
