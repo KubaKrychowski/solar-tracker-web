@@ -10,7 +10,7 @@ import { TelemetrySnapshot } from '../../shared/models/telemetry-snapshot.model'
 
 Chart.register(...registerables);
 
-type TimeRange = '6H' | '12H' | '24H';
+type TimeRange = '6H' | '12H' | '24H' | '7D' | '30D';
 
 @Component({
   selector: 'app-charts',
@@ -24,7 +24,7 @@ export class ChartsComponent {
 
   readonly range = signal<TimeRange>('24H');
 
-  private readonly rangeHours: Record<TimeRange, number> = { '6H': 6, '12H': 12, '24H': 24 };
+  private readonly rangeHours: Record<TimeRange, number> = { '6H': 6, '12H': 12, '24H': 24, '7D': 168, '30D': 720 };
 
   private readonly history = toSignal(
     this.api.get<TelemetrySnapshot[]>('/telemetry/history'),
@@ -55,9 +55,14 @@ export class ChartsComponent {
       const data = this.chartData();
       if (data.length === 0) return;
 
+      const showDate = this.rangeHours[this.range()] > 24;
       const labels = data.map(d => {
         const dt = new Date(d.timestamp);
-        return `${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
+        const time = `${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
+        if (showDate) {
+          return `${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth() + 1).toString().padStart(2, '0')} ${time}`;
+        }
+        return time;
       });
 
       this.updatePowerChart(labels, data);
