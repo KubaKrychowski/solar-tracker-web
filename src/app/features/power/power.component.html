@@ -1,0 +1,66 @@
+<div class="power-container">
+  <h2 class="page-title">Power</h2>
+
+  <!-- Stat cards -->
+  <div class="stats-grid">
+    @for (stat of stats(); track stat.label) {
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-header">
+            <mat-icon [class]="stat.colorClass">{{ stat.icon }}</mat-icon>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+          <div class="stat-value-row">
+            <span class="stat-value">{{ stat.value }}</span>
+            @if (stat.unit) {
+              <span class="stat-unit">{{ stat.unit }}</span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+
+  <!-- Daily summary + weekly chart -->
+  <div class="bottom-grid">
+    <!-- Daily Summary -->
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Daily Summary</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="target-row">
+          <span class="target-label">Daily target</span>
+          <span class="target-value">{{ todayKwh() | number:'1.2-2' }} / {{ dailyTarget }} kWh</span>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="todayProgress()" />
+        <span class="target-percent">{{ todayProgress() | number:'1.0-0' }}% of daily target reached</span>
+
+        <mat-divider />
+
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span class="summary-label">This month</span>
+            <span class="summary-value">{{ monthlyKwh() | number:'1.1-1' }} kWh</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Panels online</span>
+            <span class="summary-value success">1 / 1</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Weekly chart -->
+    <mat-card class="weekly-card">
+      <mat-card-header>
+        <mat-card-title>Weekly Production (kWh)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas #weeklyCanvas></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
