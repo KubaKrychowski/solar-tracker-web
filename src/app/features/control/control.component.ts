@@ -62,14 +62,14 @@ export class ControlComponent {
   }
 
   onModeChange(mode: TrackerMode): void {
-    this.api.post('/command/mode', { mode }).subscribe({
+    this.api.post('/tracker/command/mode', { mode }).subscribe({
       next: () => this.snackBar.open(`Mode changed to ${mode}`, 'OK', { duration: 3000 }),
     });
   }
 
   sendToTarget(): void {
     this.isMoving.set(true);
-    this.api.post('/command/move', {
+    this.api.post('/tracker/command/move', {
       azimuth: this.targetAz(),
       elevation: this.targetEl(),
     }).subscribe({
