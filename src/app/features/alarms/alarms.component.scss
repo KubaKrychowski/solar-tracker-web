@@ -1,0 +1,136 @@
+.alarms-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.alarms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+// Summary chips
+.summary-chips {
+  margin-bottom: 20px;
+
+  mat-chip-set {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.chip-active[highlighted] {
+  --mat-chip-selected-label-text-color: white;
+  --mdc-chip-elevated-selected-container-color: #FF9800;
+}
+
+.chip-critical[highlighted] {
+  --mat-chip-selected-label-text-color: white;
+  --mdc-chip-elevated-selected-container-color: #F44336;
+}
+
+// Tabs
+.alarm-tabs {
+  margin-bottom: 16px;
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 0;
+  gap: 16px;
+}
+
+.empty-icon {
+  font-size: 60px;
+  width: 60px;
+  height: 60px;
+  color: #4CAF50;
+}
+
+.empty-text {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Alarm list
+.alarm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alarm-card {
+  border-left: 4px solid;
+  transition: opacity 0.25s;
+
+  &.resolved {
+    opacity: 0.72;
+  }
+}
+
+.alarm-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 16px !important;
+}
+
+.alarm-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.alarm-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.alarm-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.alarm-message {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  &.active {
+    background-color: #FF9800;
+    color: white;
+  }
+
+  &.resolved {
+    border: 1px solid var(--mat-sys-outline-variant);
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.alarm-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
